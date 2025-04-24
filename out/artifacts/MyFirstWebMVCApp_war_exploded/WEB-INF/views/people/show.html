@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Info about person</title>
+</head>
+<body>
+
+<p th:text="${'Name: ' + person.getFIO()}">VALUE</p>
+<p th:text="${'Age: ' + person.getYear()}">VALUE</p>
+<br/>
+<div th:if="${not#lists.isEmpty(books)}">
+    <div th:each="book, size : ${books}">
+    <a   th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">Haven't books</a>
+    </div>
+</div>
+<div th:if="${#lists.isEmpty(books)}">
+    <p>Etot chelovek poka ne vzyal knigi</p>
+</div>
+<br/>
+
+
+<a th:href="@{{id}/edit(id=${person.getPersonId()})}">For edit click this button.</a>
+<br/>
+<form th:method ="DELETE" th:action="@{{id}/delete(id=${person.getPersonId()})}">
+    <input type = "submit" value = "Delete this person">
+</form>
+</body>
+</html>

@@ -1,14 +1,12 @@
 package com.bigbrooogo.spring.DAO;
 
 import com.bigbrooogo.spring.Model.Person;
+import com.bigbrooogo.spring.config.Mappers.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
-
 import java.util.List;
-import java.util.Optional;
+
 
 @Component
 public class PersonDAO {
@@ -20,14 +18,14 @@ public class PersonDAO {
     }
 
     public List<Person> getPeople() {
-        return jdbcTemplate.query("select * from person", new BeanPropertyRowMapper<>(Person.class));
+        return jdbcTemplate.query("select * from person", new PersonMapper());
     }
 
-    public Optional<Person> getPerson(int id) {
-        return jdbcTemplate.query("select * from person where id = ?",new BeanPropertyRowMapper<>(Person.class), Integer.valueOf(id))
+    public Person getPerson(int id) {
+        return jdbcTemplate.query("select * from person where id = ?", new PersonMapper(), id)
                 .stream()
-                .findAny();
-
+                .findAny()
+                .orElse(null);
     }
 
     public void savePerson(Person person) {

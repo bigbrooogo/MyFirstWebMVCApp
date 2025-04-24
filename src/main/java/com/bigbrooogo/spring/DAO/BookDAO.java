@@ -1,14 +1,11 @@
 package com.bigbrooogo.spring.DAO;
 
 import com.bigbrooogo.spring.Model.Book;
-import com.bigbrooogo.spring.Model.Person;
+import com.bigbrooogo.spring.config.Mappers.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
-import java.util.Optional;
 
 
 @Component
@@ -22,13 +19,14 @@ public class BookDAO {
     }
 
     public List<Book> getBooks() {
-        return jdbcTemplate.query("select * from books", new BeanPropertyRowMapper<>(Book.class));
+        return jdbcTemplate.query("select * from books", new BookMapper());
     }
 
-    public Optional<Book> getBook(int id) {
-        return jdbcTemplate.query("select * from books where id = ?", new BeanPropertyRowMapper<>(Book.class), Integer.valueOf(id))
+    public Book getBook(int id) {
+        return jdbcTemplate.query("select * from books where id = ?", new BookMapper(), id)
                 .stream()
-                .findAny();
+                .findAny()
+                .orElse(null);
     }
 
     public void saveBook(Book book) {
@@ -51,6 +49,12 @@ public class BookDAO {
     public void freeBook(int bookId) {
         jdbcTemplate.update("update books set user_id = null where id = ?", bookId);
     }
+
+    public List<Book> getPersonBooks(int personId) {
+        return jdbcTemplate.query("select * from books where user_id = ?", new BookMapper(), personId);
+    }
+
+
 
 
 }
