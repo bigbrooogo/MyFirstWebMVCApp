@@ -1,7 +1,7 @@
 package com.bigbrooogo.spring.DAO;
 
 import com.bigbrooogo.spring.Model.Person;
-import com.bigbrooogo.spring.config.Mappers.PersonMapper;
+import com.bigbrooogo.spring.Mappers.Mappers.PersonMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

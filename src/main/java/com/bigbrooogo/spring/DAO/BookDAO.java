@@ -1,7 +1,7 @@
 package com.bigbrooogo.spring.DAO;
 
 import com.bigbrooogo.spring.Model.Book;
-import com.bigbrooogo.spring.config.Mappers.BookMapper;
+import com.bigbrooogo.spring.Mappers.Mappers.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;

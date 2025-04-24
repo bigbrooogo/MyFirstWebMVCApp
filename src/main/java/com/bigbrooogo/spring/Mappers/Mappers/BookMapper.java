@@ -1,4 +1,4 @@
-package com.bigbrooogo.spring.config.Mappers;
+package com.bigbrooogo.spring.Mappers.Mappers;
 
 import com.bigbrooogo.spring.Model.Book;
 import org.springframework.jdbc.core.RowMapper;
