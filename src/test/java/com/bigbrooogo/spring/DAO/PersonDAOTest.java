@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @PropertySource("classpath:database.properties")
 class PersonDAOTest {
 
-    private PersonDAO personDAO;
+    private final PersonDAO personDAO;
 
     PersonDAOTest() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();

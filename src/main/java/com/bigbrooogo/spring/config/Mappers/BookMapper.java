@@ -1,7 +1,6 @@
 package com.bigbrooogo.spring.config.Mappers;
 
 import com.bigbrooogo.spring.Model.Book;
-import com.bigbrooogo.spring.Model.Person;
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
