@@ -1,8 +1,10 @@
 package com.bigbrooogo.spring.config;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.FilterRegistration;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
@@ -22,6 +24,7 @@ public class WebAppInit extends AbstractAnnotationConfigDispatcherServletInitial
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
+
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
         registerHiddenFieldFilter(servletContext);
@@ -29,4 +32,6 @@ public class WebAppInit extends AbstractAnnotationConfigDispatcherServletInitial
     private void registerHiddenFieldFilter(ServletContext servletContext) {
         servletContext.addFilter("hiddenHTTPFilter", HiddenHttpMethodFilter.class).addMappingForUrlPatterns(null, true, "/*");
     }
+
+
 }
