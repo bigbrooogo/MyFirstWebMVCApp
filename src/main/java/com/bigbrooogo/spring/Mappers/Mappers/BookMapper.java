@@ -1,6 +1,6 @@
 package com.bigbrooogo.spring.Mappers.Mappers;
 
-import com.bigbrooogo.spring.Model.Book;
+import com.bigbrooogo.spring.Models.Book;
 import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +13,6 @@ public class BookMapper implements RowMapper<Book> {
         book.setTitle(rs.getString("title"));
         book.setAuthor(rs.getString("author"));
         book.setYear(rs.getInt("year"));
-        book.setPersonId(rs.getInt("user_id"));
         return book;
     }
 }
