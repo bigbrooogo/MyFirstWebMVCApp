@@ -3,6 +3,7 @@ package com.bigbrooogo.spring.Models;
 import javax.persistence.*;
 
 import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,6 +63,10 @@ public class Person {
     }
 
     public List<Book> getBooks() {
+        for (Book b : books)
+            if (b != null && b.getPickDate() != null)
+                if (LocalDateTime.now().isAfter(b.getPickDate().plusDays(10))) b.setDelay(true);
+
         return books;
     }
 

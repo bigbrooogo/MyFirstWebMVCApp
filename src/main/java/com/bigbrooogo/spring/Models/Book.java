@@ -1,12 +1,12 @@
 package com.bigbrooogo.spring.Models;
 
 import javax.persistence.*;
+
+import jdk.jfr.Timestamp;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Component
@@ -29,15 +29,22 @@ public class Book {
     @Column(name="author")
     private String author;
 
-    @NotEmpty(message = "Author cant be empty")
-     @Max(value = 2025, message = "Year of book birth should be between 1600 and 2025 year")
-    @Min(value = 2025, message = "Year of book birth should be between 1600 and 2025 year")
+    @NotNull(message = "Year cant be empty")
+    @Max(value = 2025, message = "Year of book birth should be between 1600 and 2025 year")
+    @Min(value = 1600, message = "Year of book birth should be between 1600 and 2025 year")
     @Column(name="year")
     private int year;
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private Person owner;
+
+    @Timestamp
+    @Column(name = "pickdate")
+    private LocalDateTime pickDate;
+
+    @Transient
+    private boolean delay;
 
     public Book() {
     }
@@ -88,6 +95,22 @@ public class Book {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public LocalDateTime getPickDate() {
+        return pickDate;
+    }
+
+    public void setPickDate(LocalDateTime pickDate) {
+        this.pickDate = pickDate;
+    }
+
+    public boolean isDelay() {
+        return delay;
+    }
+
+    public void setDelay(boolean delay) {
+        this.delay = delay;
     }
 
     @Override

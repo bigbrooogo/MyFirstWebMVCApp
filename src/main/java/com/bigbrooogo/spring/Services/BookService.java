@@ -7,9 +7,12 @@ import javax.persistence.EntityManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +31,17 @@ public class BookService {
     public List<Book> getBooks() {
         return bookRepository.findAll();
     }
+
+    public List<Book> getBooks(int page, int pagePerBooks, boolean sortByYear) {
+        if (sortByYear) return bookRepository.findAll(PageRequest.of(page, pagePerBooks, Sort.by("year")))
+                .getContent();
+        return bookRepository.findAll(PageRequest.of(page, pagePerBooks))
+                .getContent();
+    }
+    public List<Book> getBooks(boolean sortByYear) {
+        return bookRepository.findAll(Sort.by("year"));
+    }
+
 
     @Transactional
     public void saveBook(Book book) {
@@ -56,6 +70,7 @@ public class BookService {
     public void takeBook(Person person, int id) {
         Session session = em.unwrap(Session.class);
         Book book = (Book) session.get(Book.class, id);
+        book.setPickDate(LocalDateTime.now());
         book.setOwner(person);
         person.addBook(book);
     }
@@ -66,6 +81,10 @@ public class BookService {
         Book book = (Book) session.get(Book.class, id);
         book.getOwner().deleteBook(book);
         book.setOwner(null);
+        book.setPickDate(null);
+    }
 
+    public List<Book> findByTitleStartingWith(String title) {
+        return bookRepository.findByTitleStartingWith(title);
     }
 }
