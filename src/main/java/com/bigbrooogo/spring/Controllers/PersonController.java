@@ -1,8 +1,9 @@
 package com.bigbrooogo.spring.Controllers;
 
-import com.bigbrooogo.spring.DAO.BookDAO;
-import com.bigbrooogo.spring.DAO.PersonDAO;
-import com.bigbrooogo.spring.Model.Person;
+import com.bigbrooogo.spring.Models.Person;
+import com.bigbrooogo.spring.Services.BookService;
+import com.bigbrooogo.spring.Services.PersonService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,25 +15,25 @@ import javax.validation.Valid;
 @RequestMapping("/people")
 public class PersonController {
 
-    private final PersonDAO personDAO;
-    private final BookDAO bookDAO;
+    private final PersonService personService;
+
 
     @Autowired
-    public PersonController(PersonDAO personDAO, BookDAO bookDAO) {
-        this.personDAO = personDAO;
-        this.bookDAO = bookDAO;
+    public PersonController(PersonService personService) {
+        this.personService = personService;
     }
 
     @GetMapping
     public String getPeople(Model model) {
-        model.addAttribute("peoples", personDAO.getPeople());
+        model.addAttribute("peoples", personService.getPeople());
         return "people/index";
     }
 
     @GetMapping("/{id}")
     public String getPerson(@PathVariable("id") int id, Model personModel, Model bookModel) {
-        personModel.addAttribute("person", personDAO.getPerson(id));
-        bookModel.addAttribute("books", bookDAO.getPersonBooks(id));
+        Person person = personService.getPerson(id);
+        personModel.addAttribute("person", person);
+        bookModel.addAttribute("books", person.getBooks());
         return "people/show";
     }
 
@@ -47,28 +48,28 @@ public class PersonController {
         if (bindingResult.hasErrors()) {
             return "people/new";
         }
-        personDAO.savePerson(person);
+        personService.savePerson(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String showPersonEdit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person", personDAO.getPerson(id));
+        model.addAttribute("person", personService.getPerson(id));
         return "people/edit";
     }
 
     @PatchMapping("/{id}")
-    public String editPerson(@PathVariable("id") int id, @ModelAttribute Person person, BindingResult bindingResult) {
+    public String editPerson(@PathVariable("id") int id, @ModelAttribute @Valid Person person, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "people/edit";
         }
-        personDAO.update(person, id);
+        personService.update(person, id);
         return "redirect:/people";
     }
 
     @DeleteMapping("/{id}/delete")
     public String deletePerson(@PathVariable("id") int id) {
-        personDAO.delete(id);
+        personService.delete(id);
         return "redirect:/people";
     }
 

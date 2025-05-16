@@ -1,6 +1,6 @@
 package com.bigbrooogo.spring.Mappers.Mappers;
 
-import com.bigbrooogo.spring.Model.Person;
+import com.bigbrooogo.spring.Models.Person;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
