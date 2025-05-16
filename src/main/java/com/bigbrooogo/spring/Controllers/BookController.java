@@ -26,13 +26,24 @@ public class BookController {
     }
 
     @GetMapping
-    public String getBooks(Model model) {
-        model.addAttribute("books", bookService.getBooks());
+    public String getIndexPage(Model model,
+                           @RequestParam(name = "sort_by_year", required = false) Boolean sort_by_year,
+                           @RequestParam(name = "page", required = false) Integer page,
+                           @RequestParam(name = "books_per_page", required = false) Integer books_per_page) {
+        if (page != null & books_per_page != null) {
+            if (page < 0) page = 0;
+            if (books_per_page < 0) books_per_page = 0;
+            if (sort_by_year == null) sort_by_year = false;
+            model.addAttribute("books", bookService.getBooks(page, books_per_page, sort_by_year));
+        }
+        else if (sort_by_year != null)
+            model.addAttribute("books", bookService.getBooks(sort_by_year));
+        else model.addAttribute("books", bookService.getBooks());
         return "books/index";
     }
 
     @GetMapping("/new")
-    public String newBook(Model model) {
+    public String getNewBookPage(Model model) {
         model.addAttribute("book", new Book());
         return "books/new";
     }
@@ -47,7 +58,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public String showBook(@PathVariable("id") int id, @ModelAttribute("person") Person person,
+    public String getShowPage(@PathVariable("id") int id, @ModelAttribute("person") Person person,
                            Model bookModel, Model personModel, Model personBook) {
         Book book = bookService.getBook(id);
         bookModel.addAttribute("book", book);
@@ -57,7 +68,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}/edit")
-    public String showBookEdit(@PathVariable("id") int id, Model model) {
+    public String getEditPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("book", bookService.getBook(id));
         return "books/edit";
     }
@@ -80,11 +91,20 @@ public class BookController {
     @PatchMapping("{id}/edit/setPerson")
     public String setPerson(@PathVariable("id") int id, Person person) {
         bookService.takeBook(person, id);
-        return "redirect:/books/{id}";
+        return "redirect:/books";
     }
     @PatchMapping("{id}/edit/clearPerson")
     public String setPerson(@PathVariable("id") int id) {
         bookService.freeBook(id);
-        return "redirect:/books/{id}";
+        return "redirect:/books";
     }
+    @GetMapping("/search")
+    public String getSearchPage(@RequestParam(value = "title", required = false) String title, Model model) {
+        if (title == null) return "books/search";
+        else {
+            model.addAttribute("books", bookService.findByTitleStartingWith(title));
+            return "books/searchResult";
+        }
+    }
+
 }
